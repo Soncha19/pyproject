@@ -7,4 +7,4 @@
 
 3.Запустити віртуальне середовище poetry shell
 
-4.Запустити проект через сервер waitress
+4.Запустити проект через сервер waitress (waitress-serve app:app)

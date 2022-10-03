@@ -1,0 +1,533 @@
+openapi: 3.0.3
+info:
+  title: Advertisement Service
+  version: 1.0.0
+tags:
+  - name: advertisement
+  - name: user
+paths:
+  /advertisement:
+    post:
+      tags:
+        - advertisement
+      summary: Add new advertisement
+      operationId: addAdvertisement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAdvertisement'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/NewAdvertisement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewAdvertisement'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Advertisement'
+        '405':
+          description: Invalid input
+      security:
+        - api_key: []
+  /advertisement/findByCategory:
+    get:
+      tags:
+        - advertisement
+      summary: Find advertisements by category
+      operationId: findAdvertisementBySategory
+      parameters:
+        - name: category
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'
+        '400':
+          description: Invalid category value
+  /advertisement/findByAccess:
+    get:
+      tags:
+        - advertisement
+      summary: Find advertisements by access
+      operationId: findAdvertisementByAccess
+      parameters:
+        - name: access
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - public
+              - local
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'
+        '400':
+          description: Invalid access value
+        '401':
+          description: Unauthorized      
+  /advertisement/findByUser:
+    get:
+      tags:
+        - advertisement
+      summary: Find advertisement by username
+      operationId: findAdvertisementByUsername
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'
+        '400':
+          description: Invalid username
+      security:
+        - api_key: []   
+  /advertisement/{advertisementId}:
+    get:
+      tags:
+        - advertisement
+      summary: Find advertisement by ID
+      operationId: getAdvertisementById
+      parameters:
+        - name: advertisementId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Advertisement'
+        '400':
+          description: Invalid ID supplied
+        '403':
+          description: Access denied  
+        '404':
+          description: Advertisement not found
+      security:
+        - api_key: []
+    put:
+      tags:
+        - advertisement
+      summary: Update advertisement by id
+      operationId: updateAdvertisementWithForm
+      parameters:
+        - name: advertisementId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Advertisement'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Advertisement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Advertisement'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Advertisement'
+        '400':
+          description: Invalid ID supplied
+        '403':
+          description: Access denied  
+        '404':
+          description: Advertisement not found
+        '405':
+          description: Invalid input
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - advertisement
+      summary: Deletes a advertisement
+      operationId: deleteAdvertisement
+      parameters:
+        - name: advertisementId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Advertisement'
+        '400':
+          description: Invalid ID supplied
+        '403':
+          description: Access denied  
+        '404':
+          description: Advertisement not found
+      security:
+        - api_key: []
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: Registrate
+      operationId: registrateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: token
+        
+        '400':
+          description: Empty fields
+        '401':
+          description: Username or email already taken
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: Incorrect password or username
+  /user/{username}:
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      description: ''
+      operationId: getUserByName
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNoPassword'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserNoPassword'
+        '400':
+          description: Invalid username supplied
+        '403':
+          description: Access denied  
+        '404':
+          description: User not found
+      security:
+        - api_key: []
+    put:
+      tags:
+        - user
+      summary: Update user
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNoPassword'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserNoPassword'
+        '400':
+          description: Invalid username supplied
+        '403':
+          description: Access denied  
+        '405':
+          description: Invalid input
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username supplied
+        '403':
+          description: Access denied  
+        '404':
+          description: User not found
+      security:
+          - api_key: []
+components:
+  schemas:
+    NewAdvertisement:
+      type: object
+      properties:
+        username:
+          type: string
+          example: 1
+        text:
+          type: string
+          example: missing doggie
+        category:
+          $ref:  '#/components/schemas/Category'
+        access:
+          type: string
+          enum:
+            - local
+            - public
+      xml:
+        name: advertisement
+    Advertisement:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: 1
+        text:
+          type: string
+          example: missing doggie
+        category:
+          $ref:  '#/components/schemas/Category'
+        status:
+          type: string
+          enum:
+            - local
+            - public
+      xml:
+        name: advertisement    
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 7 Sheptytskoho
+        city:
+          type: string
+          example: Novoyavorivsk
+        country:
+          type: string
+          example: Ukraine
+        zip:
+          type: string
+          example: '81053'
+      xml:
+        name: address
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: missing pet
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        addres:
+          $ref:  '#/components/schemas/Address'
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+      xml:
+        name: user
+    UserNoPassword:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        addres:
+          $ref:  '#/components/schemas/Address'
+        email:
+          type: string
+          example: john@email.com
+        phone:
+          type: string
+          example: '12345'
+      xml:
+        name: user
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

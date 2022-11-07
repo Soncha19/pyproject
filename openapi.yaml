@@ -30,7 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Advertisement'          
+                $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 $ref: '#/components/schemas/Advertisement'
@@ -58,7 +58,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Advertisement'          
+                  $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 type: array
@@ -89,7 +89,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Advertisement'          
+                  $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 type: array
@@ -98,7 +98,7 @@ paths:
         '400':
           description: Invalid access value
         '401':
-          description: Unauthorized      
+          description: Unauthorized
   /advertisement/findByUser:
     get:
       tags:
@@ -119,7 +119,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Advertisement'          
+                  $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 type: array
@@ -128,8 +128,8 @@ paths:
         '400':
           description: Invalid username
       security:
-        - api_key: []   
-  /advertisement/{advertisementId}:
+        - api_key: []
+  /advertisement/:
     get:
       tags:
         - advertisement
@@ -137,25 +137,24 @@ paths:
       operationId: getAdvertisementById
       parameters:
         - name: advertisementId
-          in: path
+          in: query
           required: true
           schema:
             type: integer
-            format: int64
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Advertisement'          
+                $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 $ref: '#/components/schemas/Advertisement'
         '400':
           description: Invalid ID supplied
         '403':
-          description: Access denied  
+          description: Access denied
         '404':
           description: Advertisement not found
       security:
@@ -167,7 +166,7 @@ paths:
       operationId: updateAdvertisementWithForm
       parameters:
         - name: advertisementId
-          in: path
+          in: query
           required: true
           schema:
             type: integer
@@ -190,14 +189,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Advertisement'          
+                $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 $ref: '#/components/schemas/Advertisement'
         '400':
           description: Invalid ID supplied
         '403':
-          description: Access denied  
+          description: Access denied
         '404':
           description: Advertisement not found
         '405':
@@ -211,7 +210,7 @@ paths:
       operationId: deleteAdvertisement
       parameters:
         - name: advertisementId
-          in: path
+          in: query
           required: true
           schema:
             type: integer
@@ -222,16 +221,106 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Advertisement'          
+                $ref: '#/components/schemas/Advertisement'
             application/xml:
               schema:
                 $ref: '#/components/schemas/Advertisement'
         '400':
           description: Invalid ID supplied
         '403':
-          description: Access denied  
+          description: Access denied
         '404':
           description: Advertisement not found
+      security:
+        - api_key: []
+  /category/register:
+    post:
+      tags:
+        - category
+      summary: Registrate
+      operationId: registrateCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '405':
+          description: Invalid input
+      security:
+        - api_key: []
+  /category:
+    delete:
+      tags:
+        - category
+      summary: Delete category
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+        '403':
+          description: Access denied
+        '404':
+          description: User not found
+      security:
+          - api_key: []
+    get:
+      tags:
+        - category
+      summary: Find advertisement by ID
+      operationId: getCategoryById
+      parameters:
+        - name: categorytId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid ID supplied
+        '403':
+          description: Access denied
+        '404':
+          description: Category not found
       security:
         - api_key: []
   /user/register:
@@ -259,7 +348,7 @@ paths:
               schema:
                 type: string
                 example: token
-        
+
         '400':
           description: Empty fields
         '401':
@@ -307,7 +396,7 @@ paths:
                 type: string
         '401':
           description: Incorrect password or username
-  /user/{username}:
+  /user:
     get:
       tags:
         - user
@@ -316,7 +405,7 @@ paths:
       operationId: getUserByName
       parameters:
         - name: username
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -326,14 +415,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserNoPassword'          
+                $ref: '#/components/schemas/UserNoPassword'
             application/xml:
               schema:
                 $ref: '#/components/schemas/UserNoPassword'
         '400':
           description: Invalid username supplied
         '403':
-          description: Access denied  
+          description: Access denied
         '404':
           description: User not found
       security:
@@ -345,7 +434,7 @@ paths:
       operationId: updateUser
       parameters:
         - name: username
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -367,14 +456,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserNoPassword'          
+                $ref: '#/components/schemas/UserNoPassword'
             application/xml:
               schema:
                 $ref: '#/components/schemas/UserNoPassword'
         '400':
           description: Invalid username supplied
         '403':
-          description: Access denied  
+          description: Access denied
         '405':
           description: Invalid input
       security:
@@ -386,7 +475,7 @@ paths:
       operationId: deleteUser
       parameters:
         - name: username
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -396,14 +485,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'          
+                $ref: '#/components/schemas/User'
             application/xml:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
           description: Invalid username supplied
         '403':
-          description: Access denied  
+          description: Access denied
         '404':
           description: User not found
       security:
@@ -449,7 +538,7 @@ components:
             - local
             - public
       xml:
-        name: advertisement    
+        name: advertisement
     Address:
       type: object
       properties:

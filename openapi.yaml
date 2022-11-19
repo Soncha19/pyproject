@@ -321,8 +321,6 @@ paths:
           description: Access denied
         '404':
           description: Category not found
-      security:
-        - api_key: []
   /user/register:
     post:
       tags:

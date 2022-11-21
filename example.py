@@ -1,9 +1,10 @@
 from models import *
+Base.metadata.create_all(bind=engine)
 session = Session()
 
-user1 = User(username='olena', first_name='Olena',last_name='Pyrih',address='hfkhsiuf', email='olenka.pyrih@gmail.com', phone_number='0658951255')
-user2 = User(username='sofiya', first_name='Sofiya',last_name='Hymon', address='ghdkdf', email='sofiyahymon@gmail.com', phone_number='0985266654')
-user3 = User(username='andriy', first_name='Andriy',last_name='Malynovskyi', address='rtyuiwop', email='andriymalynovskyi@gmail.com', phone_number='0962645485')
+user1 = User(username='olena', first_name='Olena',last_name='Pyrih',address='hfkhsiuf', email='olenka.pyrih@gmail.com', phone_number='0658951255', password='1')
+user2 = User(username='sofiya', first_name='Sofiya',last_name='Hymon', address='ghdkdf', email='sofiyahymon@gmail.com', phone_number='0985266654', password='2')
+user3 = User(username='andriy', first_name='Andriy',last_name='Malynovskyi', address='rtyuiwop', email='andriymalynovskyi@gmail.com', phone_number='0962645485', password='3')
 session.add(user1)
 session.add(user2)
 session.add(user3)

@@ -25,7 +25,7 @@ def new_advert():
 			return "Category doesn't exists", 405
 		Session.add(ad1)
 		Session.commit()
-		return advert_schema.dump(ad1)
+		return advert_schema.dump(ad1), 200
 	except ValidationError as err:
 		return jsonify(err.messages), 405
 
@@ -41,9 +41,9 @@ def new_category():
 		category1 = category_schema.load(args, session=session)
 		Session.add(category1)
 		Session.commit()
-		return category_schema.dump(category1)
+		return category_schema.dump(category1), 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 400
 
 
 @app.route('/advertisement', methods=['GET'])
@@ -61,9 +61,9 @@ def find_advert_by_id():
 		if (not ads.status) and (not logged_in):
 			return "You don't have access", 403
 		ad_schema = AdvertSchema()
-		return ad_schema.dumps(ads)
+		return ad_schema.dumps(ads), 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 401
 
 
 @app.route('/advertisement/findByAccess', methods=['GET'])
@@ -83,9 +83,9 @@ def find_advert_by_access():
 		else:
 			ads = Session.query(Advertisement).filter(Advertisement.status == advert_access)
 		ad_schema = AdvertSchema()
-		return json.dumps([ad_schema.dump(i) for i in ads])
+		return json.dumps([ad_schema.dump(i) for i in ads]), 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 401
 
 
 @app.route('/advertisement/findByCategory', methods=['GET'])
@@ -107,9 +107,9 @@ def find_advert_by_category():
 			ads = Session.query(Advertisement).filter(Advertisement.category_id == Category.id, Category.name == advert_category).filter(Advertisement.status == 1)
 
 		ad_schema = AdvertSchema()
-		return json.dumps([ad_schema.dump(i) for i in ads])
+		return json.dumps([ad_schema.dump(i) for i in ads]), 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 401
 
 
 @app.route('/advertisement/findByUser', methods=['GET'])
@@ -122,7 +122,7 @@ def find_advert_by_user():
 		args = request.args
 		advert_user = args.get('advert_user')
 		if (session.query(Advertisement).filter(Advertisement.user_id == User.id,
-		                                        User.username == advert_user).count() == 0):
+												User.username == advert_user).count() == 0):
 			return "Ads doesn't exists", 400
 
 		if logged_in:
@@ -131,7 +131,7 @@ def find_advert_by_user():
 			ads = Session.query(Advertisement).filter(Advertisement.user_id == User.id, User.username == advert_user).filter(Advertisement.status == 1)
 
 		ad_schema = AdvertSchema()
-		return json.dumps([ad_schema.dump(i) for i in ads])
+		return json.dumps([ad_schema.dump(i) for i in ads]), 200
 	except ValidationError as err:
 		return err.messages
 
@@ -139,7 +139,6 @@ def find_advert_by_user():
 @app.route('/user/register', methods=['Post'])
 def new_user():
 	args = request.get_json()
-
 	try:
 		user_schema = UserSchema()
 		user1 = user_schema.load(args, session=session)
@@ -174,10 +173,9 @@ def find_user_by_username():
 			return "User doesn't exists", 405
 		user = Session.query(User).filter(User.username == user_username).first()
 		user_schema = UserSchema()
-
-		return user_schema.dumps(user)
+		return user_schema.dump(user), 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 400
 
 
 @app.route('/user/username', methods=['PUT'])
@@ -236,7 +234,7 @@ def update_advert():
 		session.query(Advertisement).filter(Advertisement.id == ad_id).update(args)
 		users = session.query(Advertisement).filter(Advertisement.id == ad_id).first()
 		session.commit()
-		return ad_schema.dump(ad1)
+		return ad_schema.dump(ad1), 200
 	except ValidationError as err:
 		return err.messages
 
@@ -263,9 +261,9 @@ def delete_user():
 
 		Session.query(User).filter(User.id == user_id).delete()
 		Session.commit()
-		return "user is deleted"
+		return "user is deleted", 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 400
 
 
 @app.route('/category', methods=['DELETE'])
@@ -323,9 +321,9 @@ def find_category_by_id():
 			return "Category doesn't exists", 405
 		ads = Session.query(Category).filter(Category.id == c_id).first()
 		ad_schema = CategorySchema()
-		return ad_schema.dumps(ads)
+		return ad_schema.dumps(ads), 200
 	except ValidationError as err:
-		return err.messages
+		return err.messages, 400
 
 
 @auth.verify_password

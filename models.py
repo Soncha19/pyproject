@@ -8,9 +8,10 @@ from marshmallow import Schema, fields, validate, ValidationError
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 import sys
 
-source = open("connect_string.txt", "r")
-engine = create_engine(source.readline())
+# source = open("connect_string.txt", "r")
+# engine = create_engine(source.readline())
 #engine = create_engine('mysql+pymysql://root:root1234@localhost:3306/advert')
+engine = create_engine('mysql+pymysql://root:2004@localhost:3306/Advertisement')
 SessionFactory = sessionmaker(bind=engine)
 Session = scoped_session(SessionFactory)
 Base = declarative_base()
@@ -74,7 +75,7 @@ class UserSchema(SQLAlchemyAutoSchema):
 
 	first_name = fields.String(validate=validate.Length(min=1, max=15))
 	last_name = fields.String(validate=validate.Length(min=1, max=15))
-	email = fields.String(validate=validate.Email())
+	email = fields.String()
 	address = fields.String(validate=validate.Length(min=1, max=60))
 	phone_number = fields.String(validate=validate_phone)
 	username = fields.String(validate=validate_username)

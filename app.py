@@ -1,16 +1,15 @@
 from flask import Flask
 from waitress import serve
 from routes import *
-# app = Flask(__name__)
-#route 123waitress-serve app:app
-
-@app.route('/api/v1/hello-world-9')
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+jwt = JWTManager(app)
+app.config["JWT_SECRET_KEY"] = "secret"
+CORS(app)
+@app.route('/api/v1/hello-world-62')
 def hello_world():  # put application's code here
-    return "Hello world 9",200
-# @app.route('/api/v1/hello-world-5')
-# def hell_world():  # put application's code here
-#     return "Hello world 5",200
+    return "Hello world 62",200
 
 if __name__ == '__main__':
-    print("Server started")
+    # print("Server started")
     serve(app)

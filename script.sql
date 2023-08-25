@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS advert.user (
   username VARCHAR(20) NOT NULL,
   first_name VARCHAR(15) NOT NULL,
   last_name VARCHAR(15) NOT NULL,
+  password VARCHAR(250) NOT NULL,
   address VARCHAR(60) NOT NULL,
   email VARCHAR(45) NOT NULL,
   phone_number VARCHAR(13) NOT NULL,
@@ -23,7 +24,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS advert.advertisement (
   id INT NOT NULL AUTO_INCREMENT,
   description VARCHAR(100) NOT NULL,
-  status TINYINT NOT NULL,
+  is_global TINYINT NOT NULL,
   category_id INT NOT NULL,
   user_id INT NOT NULL,
   PRIMARY KEY (id),
